@@ -26,6 +26,7 @@ spec:
     metadata:
       annotations:
         instrumentation.opentelemetry.io/inject-go: "true"
+        instrumentation.opentelemetry.io/otel-go-auto-target-exe: '/src/checkoutservice'
       labels:
         app: {{ .Values.checkoutService.name }}
     spec:
