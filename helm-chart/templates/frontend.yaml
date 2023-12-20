@@ -31,29 +31,19 @@ spec:
         instrumentation.opentelemetry.io/otel-go-auto-target-exe: '/src/server'
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
     spec:
+      securityContext:
+        capabilities:
+          add:
+            - SYS_PTRACE
+        privileged: true
+        runAsUser: 0
       {{- if .Values.serviceAccounts.create }}
       serviceAccountName: {{ .Values.frontend.name }}
       {{- else }}
       serviceAccountName: default
       {{- end }}
-      securityContext:
-        fsGroup: 1000
-        runAsGroup: 1000
-        runAsNonRoot: true
-        runAsUser: 1000
-        {{- if .Values.seccompProfile.enable }}
-        seccompProfile:
-          type: {{ .Values.seccompProfile.type }}
-        {{- end }}
       containers:
         - name: server
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-            privileged: false
-            readOnlyRootFilesystem: true
           image: {{ .Values.images.repository }}/{{ .Values.frontend.name }}:{{ .Values.images.tag | default .Chart.AppVersion }}
           ports:
           - containerPort: 8080

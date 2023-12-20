@@ -30,29 +30,19 @@ spec:
       labels:
         app: {{ .Values.checkoutService.name }}
     spec:
+      securityContext:
+        capabilities:
+          add:
+            - SYS_PTRACE
+        privileged: true
+        runAsUser: 0
       {{- if .Values.serviceAccounts.create }}
       serviceAccountName: {{ .Values.checkoutService.name }}
       {{- else }}
       serviceAccountName: default
       {{- end }}
-      securityContext:
-        fsGroup: 1000
-        runAsGroup: 1000
-        runAsNonRoot: true
-        runAsUser: 1000
-        {{- if .Values.seccompProfile.enable }}
-        seccompProfile:
-          type: {{ .Values.seccompProfile.type }}
-        {{- end }}
       containers:
       - name: server
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-          privileged: false
-          readOnlyRootFilesystem: true
         image: {{ .Values.images.repository }}/{{ .Values.checkoutService.name }}:{{ .Values.images.tag | default .Chart.AppVersion }}
         ports:
         - containerPort: 5050

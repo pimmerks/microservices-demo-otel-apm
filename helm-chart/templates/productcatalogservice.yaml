@@ -30,30 +30,20 @@ spec:
       labels:
         app: {{ .Values.productCatalogService.name }}
     spec:
+      securityContext:
+        capabilities:
+          add:
+            - SYS_PTRACE
+        privileged: true
+        runAsUser: 0
       {{- if .Values.serviceAccounts.create }}
       serviceAccountName: {{ .Values.productCatalogService.name }}
       {{- else }}
       serviceAccountName: default
       {{- end }}
       terminationGracePeriodSeconds: 5
-      securityContext:
-        fsGroup: 1000
-        runAsGroup: 1000
-        runAsNonRoot: true
-        runAsUser: 1000
-        {{- if .Values.seccompProfile.enable }}
-        seccompProfile:
-          type: {{ .Values.seccompProfile.type }}
-        {{- end }}
       containers:
       - name: server
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-          privileged: false
-          readOnlyRootFilesystem: true
         image: {{ .Values.images.repository }}/{{ .Values.productCatalogService.name }}:{{ .Values.images.tag | default .Chart.AppVersion }}
         ports:
         - containerPort: 3550

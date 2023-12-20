@@ -51,15 +51,6 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: 5
       restartPolicy: Always
-      securityContext:
-        fsGroup: 1000
-        runAsGroup: 1000
-        runAsNonRoot: true
-        runAsUser: 1000
-        {{- if .Values.seccompProfile.enable }}
-        seccompProfile:
-          type: {{ .Values.seccompProfile.type }}
-        {{- end }}
       {{- if .Values.loadGenerator.checkFrontendInitContainer }}
       initContainers:
       - command:
@@ -73,13 +64,6 @@ spec:
               exit 1
           fi
         name: frontend-check
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-          privileged: false
-          readOnlyRootFilesystem: true
         image: busybox:latest@sha256:5c63a9b46e7139d2d5841462859edcbbf57f238af891b6096578e5894cfe5ae2
         env:
         - name: FRONTEND_ADDR
@@ -87,13 +71,6 @@ spec:
       {{- end }}
       containers:
       - name: main
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-          privileged: false
-          readOnlyRootFilesystem: true
         image: {{ .Values.images.repository }}/{{ .Values.loadGenerator.name }}:{{ .Values.images.tag | default .Chart.AppVersion }}
         env:
         - name: FRONTEND_ADDR
