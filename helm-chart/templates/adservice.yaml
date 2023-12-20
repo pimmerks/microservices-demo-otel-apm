@@ -24,6 +24,8 @@ spec:
       app: {{ .Values.adService.name }}
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-java: "true"
       labels:
         app: {{ .Values.adService.name }}
     spec:

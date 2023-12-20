@@ -24,6 +24,8 @@ spec:
       app: {{ .Values.shippingService.name }}
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-go: "true"
       labels:
         app: {{ .Values.shippingService.name }}
     spec:

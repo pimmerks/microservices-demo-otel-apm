@@ -24,6 +24,8 @@ spec:
       app: {{ .Values.paymentService.name }}
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "true"
       labels:
         app: {{ .Values.paymentService.name }}
     spec:
