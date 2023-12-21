@@ -36,6 +36,11 @@ spec:
       {{- else }}
       serviceAccountName: default
       {{- end }}
+      securityContext:
+        capabilities:
+          add:
+            - SYS_PTRACE
+        runAsUser: 0
       containers:
         - name: server
           image: {{ .Values.images.repository }}/{{ .Values.frontend.name }}:{{ .Values.images.tag | default .Chart.AppVersion }}
