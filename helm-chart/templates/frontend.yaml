@@ -36,29 +36,7 @@ spec:
       {{- else }}
       serviceAccountName: default
       {{- end }}
-      shareProcessNamespace: true
       containers:
-        - name: autoinstrumenter
-          image: grafana/beyla:latest
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            runAsUser: 0
-            # uncomment the following line if the logs still show permission errors:
-            # privileged: true
-            capabilities:
-              add:
-                - SYS_ADMIN
-          env:
-            - name: BEYLA_SERVICE_NAME
-              value: "frontend"
-            - name: BEYLA_PRINT_TRACES
-              value: "true"
-            - name: BEYLA_OPEN_PORT
-              value: "8443"
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "http://otel-collector-opentelemetry-collector.multistax-system.svc.cluster.local:4318"
-            - name: BEYLA_LOG_LEVEL
-              value: "DEBUG"
         - name: server
           image: {{ .Values.images.repository }}/{{ .Values.frontend.name }}:{{ .Values.images.tag | default .Chart.AppVersion }}
           ports:
