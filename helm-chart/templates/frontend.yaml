@@ -50,7 +50,7 @@ spec:
                 - SYS_ADMIN
           env:
             - name: BEYLA_SERVICE_NAME
-              value: "cartservice"
+              value: "frontend"
             - name: BEYLA_PRINT_TRACES
               value: "true"
             - name: BEYLA_OPEN_PORT
