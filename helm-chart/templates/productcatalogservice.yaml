@@ -30,11 +30,6 @@ spec:
       labels:
         app: {{ .Values.productCatalogService.name }}
     spec:
-      securityContext:
-        capabilities:
-          add:
-            - SYS_PTRACE
-        runAsUser: 0
       {{- if .Values.serviceAccounts.create }}
       serviceAccountName: {{ .Values.productCatalogService.name }}
       {{- else }}

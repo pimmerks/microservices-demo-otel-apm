@@ -30,12 +30,6 @@ spec:
       labels:
         app: {{ .Values.shippingService.name }}
     spec:
-      securityContext:
-        capabilities:
-          add:
-            - SYS_PTRACE
-        privileged: true
-        runAsUser: 0
       {{- if .Values.serviceAccounts.create }}
       serviceAccountName: {{ .Values.shippingService.name }}
       {{- else }}
